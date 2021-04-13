@@ -8,8 +8,10 @@ class Stage:
         self.settings = main.settings
         self.colour = self.settings.stage_colour
         self.centre_screen = (self.settings.screen_width / 2, self.settings.screen_height / 2)
-        self.starting_y = self.centre_screen[1] - self.settings.num_row / 2 * 100
-        self.starting_x = self.centre_screen[0] - self.settings.num_column / 2 * 100
+        self.grid_width = self.settings.grid_width
+        self.grid_height = self.settings.grid_height
+        self.starting_y = self.centre_screen[1] - self.settings.num_row / 2 * self.grid_height
+        self.starting_x = self.centre_screen[0] - self.settings.num_column / 2 * self.grid_width
         self.grids = []
 
     def create_stage(self):
@@ -17,10 +19,10 @@ class Stage:
         x = self.starting_x
         for row in range(0, self.settings.num_row):
             for column in range(0, self.settings.num_column):
-                new_grid = pygame.Rect(x, y, self.settings.grid_width, self.settings.grid_height)
+                new_grid = pygame.Rect(x, y, self.grid_width, self.grid_height)
                 self.grids.append(new_grid)
-                x += 100
-            y += 100
+                x += self.grid_width
+            y += self.grid_height
             x = self.starting_x
 
     def draw_stage(self):
