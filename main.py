@@ -13,12 +13,10 @@ class Main:
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Kohki Hatori")
-        self.centre_screen = (self.settings.screen_width / 2, self.settings.screen_height / 2)
-        self.starting_y = self.centre_screen[1] - self.settings.num_row / 2 * 100
-        self.starting_x = self.centre_screen[0] - self.settings.num_column / 2 * 100
         self.stage = Stage(self)
 
     def run_game(self):
+        self.stage.create_stage()
         while True:
             self._check_events()
             self._update_screen()
@@ -39,7 +37,6 @@ class Main:
         self.screen.fill(self.settings.bg_colour)
         self.stage.draw_stage()
         pygame.display.flip()
-
 
 
 if __name__ == "__main__":
