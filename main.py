@@ -2,7 +2,7 @@ import sys
 import pygame
 from settings import Settings
 from stage import Stage
-from barrier import Barrier
+from barrier import Barriers
 
 
 class Main:
@@ -15,7 +15,7 @@ class Main:
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Kohki Hatori")
         self.stage = Stage(self)
-        self.barriers = Barrier(self)
+        self.barriers = Barriers(self)
 
 
     def run_game(self):
@@ -38,11 +38,12 @@ class Main:
 
     def _create_environment(self):
         self.stage.create_stage()
-        self.barriers.create_barrier()
+        self.barriers.create_barriers()
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_colour)
         self.stage.draw_stage()
+        self.barriers.draw_barriers()
         pygame.display.flip()
 
 
