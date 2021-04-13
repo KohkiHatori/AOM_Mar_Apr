@@ -3,6 +3,7 @@ import pygame
 from settings import Settings
 from stage import Stage
 from barrier import Barriers
+from mirror import Mirrors
 
 
 class Main:
@@ -16,7 +17,7 @@ class Main:
         pygame.display.set_caption("Kohki Hatori")
         self.stage = Stage(self)
         self.barriers = Barriers(self)
-
+        self.mirrors = Mirrors(self)
 
     def run_game(self):
         self._create_environment()
@@ -39,11 +40,13 @@ class Main:
     def _create_environment(self):
         self.stage.create_stage()
         self.barriers.create_barriers()
+        self.mirrors.create_mirrors()
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_colour)
         self.stage.draw_stage()
         self.barriers.draw_barriers()
+        self.mirrors.draw_mirrors()
         pygame.display.flip()
 
 

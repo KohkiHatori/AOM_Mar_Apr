@@ -12,6 +12,8 @@ class Settings:
         self.num_barrier = self.num_grid // 10
         self.barrier_colour = (255,255,0)
         self.num_mirror = 4
+        self.mirror_width = 10
+        self.mirror_colour = (128, 128, 128)
         self.num_player = 4
         self.num_shots = 5
 
