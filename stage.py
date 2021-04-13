@@ -7,9 +7,9 @@ class Stage():
         self.screen = main.screen
         self.settings = main.settings
         self.colour = self.settings.stage_colour
-        self.centre_screen = (self.settings.screen_width / 2, self.settings.screen_height / 2)
-        self.starting_y = self.centre_screen[1] - self.settings.num_row / 2 * 100
-        self.starting_x = self.centre_screen[0] - self.settings.num_column / 2 * 100
+        self.centre_screen = main.centre_screen
+        self.starting_y = main.starting_y
+        self.starting_x = main.starting_x
         self.rect = pygame.Rect(0, 0, 100, 100)
 
     def draw_stage(self):
