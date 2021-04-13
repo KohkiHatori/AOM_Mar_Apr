@@ -17,8 +17,8 @@ class Stage:
     def create_stage(self):
         y = self.starting_y
         x = self.starting_x
-        for row in range(0, self.settings.num_row):
-            for column in range(0, self.settings.num_column):
+        for row in range(self.settings.num_row):
+            for column in range(self.settings.num_column):
                 new_grid = pygame.Rect(x, y, self.grid_width, self.grid_height)
                 self.grids.append(new_grid)
                 x += self.grid_width

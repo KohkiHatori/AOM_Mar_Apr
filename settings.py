@@ -9,8 +9,8 @@ class Settings:
         self.num_grid = self.num_row * self.num_column
         self.grid_width = 100
         self.grid_height = 100
-        self.num_barrier = 5
-        self.barrier_colour = (0,0,255)
+        self.num_barrier = self.num_grid // 10
+        self.barrier_colour = (255,255,0)
         self.num_mirror = 4
         self.num_player = 4
         self.num_shots = 5

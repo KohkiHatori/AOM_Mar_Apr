@@ -9,15 +9,27 @@ class Barriers:
         self.settings = main.settings
         self.stage_grids = main.stage.grids
         self.colour = self.settings.barrier_colour
-        self.barrier_grids = []
+        self.grid_height = self.settings.grid_height
+        self.grid_width = self.settings.grid_width
+        self.starting_y = main.stage.starting_y + self.grid_height
+        self.starting_x = main.stage.starting_x + self.grid_width
 
     def create_barriers(self):
-        for i in range(0, self.settings.num_barrier):
-            self.barrier_grids.append(random.randint(0, len(self.stage_grids) - 1))
+        self.barrier_allowed_grids = []
+        y = self.starting_y
+        x = self.starting_x
+        for row in range(self.settings.num_row - 2):
+            for column in range(self.settings.num_column - 2):
+                new_grid = pygame.Rect(x, y, self.grid_width, self.grid_height)
+                self.barrier_allowed_grids.append(new_grid)
+                x += self.grid_width
+            y += self.grid_height
+            x = self.starting_x
+        self.barrier_grids = (random.sample(self.barrier_allowed_grids, self.settings.num_barrier))
 
     def draw_barriers(self):
-        for i in self.barrier_grids:
-            obj = self.stage_grids[i]
-            obj = obj.inflate(-10,-10)
-            pygame.draw.rect(self.screen, self.colour, obj,width=0,)
+        for grid in self.barrier_grids:
+            obj = grid
+            obj = obj.inflate(-10, -10)
+            pygame.draw.rect(self.screen, self.colour, obj)
 
