@@ -4,6 +4,7 @@ from settings import Settings
 from stage import Stage
 from barrier import Barriers
 from mirror import Mirrors
+from player import Players
 
 
 class Main:
@@ -18,6 +19,7 @@ class Main:
         self.stage = Stage(self)
         self.barriers = Barriers(self)
         self.mirrors = Mirrors(self)
+        self.players = Players(self)
 
     def run_game(self):
         self._create_environment()
@@ -47,6 +49,7 @@ class Main:
         self.stage.draw_stage()
         self.barriers.draw_barriers()
         self.mirrors.draw_mirrors()
+        self.players.blitme()
         pygame.display.flip()
 
 

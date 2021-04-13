@@ -8,6 +8,7 @@ class Mirrors:
         self.screen = main.screen
         self.settings = main.settings
         self.colour = self.settings.mirror_colour
+        self.num = self.settings.num_mirror
         self.starting_x = main.stage.starting_x
         self.starting_y = main.stage.starting_y
         self.grid_width = self.settings.grid_width
@@ -34,9 +35,8 @@ class Mirrors:
                 x += self.grid_width * self.settings.num_column + self.mirror_width
             y += self.grid_height
             x = self.starting_x - self.mirror_width
-        self.mirror_grids = []
+        self.mirror_grids = random.sample(self.mirror_allowed_grids, self.num)
 
     def draw_mirrors(self):
-        for grid in self.mirror_allowed_grids:
-            obj = grid
-            pygame.draw.rect(self.screen, self.colour, obj)
+        for grid in self.mirror_grids:
+            pygame.draw.rect(self.screen, self.colour, grid)

@@ -25,7 +25,7 @@ class Barriers:
                 x += self.grid_width
             y += self.grid_height
             x = self.starting_x
-        self.barrier_grids = (random.sample(self.barrier_allowed_grids, self.settings.num_barrier))
+        self.barrier_grids = random.sample(self.barrier_allowed_grids, self.settings.num_barrier)
 
     def draw_barriers(self):
         for grid in self.barrier_grids:
