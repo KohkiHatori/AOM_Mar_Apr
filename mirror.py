@@ -55,8 +55,8 @@ class Mirrors:
             start = random.randint(0, limit - length)
             for n in range(start, start + length):
                 self.mirror_grids.append(self.mirror_allowed_grids[ind][n])
-            del self.mirror_allowed_grids[ind][start if start == 0 else start - 1: start + length if start + length >=
-                                                                                                     limit - 1 else start + length + 1]
+            del self.mirror_allowed_grids[ind][start if start == 0 else start - 1: start + length if start + length >
+                                                                                                     limit else start + length + 1]
         for i in range(self.num - 4):
             space_available = True
             valid = False
@@ -79,7 +79,7 @@ class Mirrors:
                 for n in range(start, start + length):
                     self.mirror_grids.append(self.mirror_allowed_grids[ind][n])
                 del self.mirror_allowed_grids[ind][start if start == 0 else start - 1: start + length if start + length >
-                                                                                                         limit - 1 else start + length + 1]
+                                                                                                         limit else start + length + 1]
 
     def draw_mirrors(self):
         for grid in self.mirror_grids:
