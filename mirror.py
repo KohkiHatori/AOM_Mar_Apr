@@ -35,7 +35,11 @@ class Mirrors:
                 x += self.grid_width * self.settings.num_column + self.mirror_width
             y += self.grid_height
             x = self.starting_x - self.mirror_width
+
+
         self.mirror_grids = random.sample(self.mirror_allowed_grids, self.num)
+
+
 
     def draw_mirrors(self):
         for grid in self.mirror_grids:

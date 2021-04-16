@@ -4,8 +4,8 @@ class Settings:
         self.screen_height = 800
         self.bg_colour = (230, 230, 230)
         self.stage_colour = (0,0,0)
-        self.num_row = 8
-        self.num_column = 10
+        self.num_row = 6
+        self.num_column = 8
         self.num_grid = self.num_row * self.num_column
         self.grid_width = 100
         self.grid_height = 100
