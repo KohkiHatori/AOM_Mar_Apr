@@ -1,6 +1,10 @@
+# Background colour
 bg = (230, 230, 230)
+# Mirror colour
 grey = (128, 128, 128)
+# Line colour
 black = (0, 0, 0)
+# Barrier colour
 yellow = (255, 255, 0)
 
 # Player colours
@@ -17,8 +21,8 @@ class Settings:
         self.bg_colour = bg
 
         self.stage_colour = black
-        self.num_row = 9
-        self.num_column = 16
+        self.num_row = 6
+        self.num_column = 8
 
         self.num_grid = self.num_row * self.num_column
         self.grid_width = 100
@@ -36,4 +40,10 @@ class Settings:
 
         self.num_player = 4
         self.player_colours = [green, red, blue, purple]
+
         self.num_shots = 5
+        self.bullet_colour = black
+        self.bullet_width = 10
+        self.bullet_height = 10
+
+
