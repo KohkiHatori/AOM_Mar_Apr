@@ -27,7 +27,7 @@ class Settings:
 
         self.num_barrier = self.num_grid // 10
         self.barrier_colour = yellow
-        self.barrier_minimum_length = 2
+        self.barrier_minimum_length = 1
         self.barrier_maximum_length = 3
 
         self.num_mirror = 5

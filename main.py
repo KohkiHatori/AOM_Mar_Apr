@@ -1,7 +1,7 @@
 import sys
 import pygame
 import random
-from time import sleep
+import time
 from settings import Settings
 from stage import Stage
 from barrier import Barriers
@@ -29,15 +29,15 @@ class Main:
         self.players = []
         self.text = Text(self)
         self.stats = Stats()
-        self.start_button = Button("START")
+        self.start_button = Button(self, "START")
+        self._create_environment()
+        self.constructing = True
 
     def run_game(self):
-
-        self._create_environment()
         while True:
+            self._check_events()
             if self.stats.active:
                 pass
-            self._check_events()
             self._update_screen()
 
     def _check_events(self):
@@ -46,21 +46,25 @@ class Main:
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_start_button(mouse_pos)
 
     def _check_keydown_events(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
                 sys.exit()
 
+    def _check_start_button(self, mouse_pos):
+        if self.start_button.rect.collidepoint(mouse_pos):
+            self.stats.active = True
+            self.timer = time.time()
+
     def _create_environment(self):
         self.stage.create_stage()
-        sleep(2)
         self.barriers.create_barriers()
-        sleep(2)
         self.mirrors.create_mirrors()
-        sleep(2)
         self._create_players()
-        sleep(2)
 
     def _create_players(self):
         indices = []
@@ -73,18 +77,31 @@ class Main:
             self.players.append(new_player)
             indices.remove(new_player.position)
 
-
     def _draw_players(self):
         for player in self.players:
             player.blitme(player_allowed_grids=self.barriers.no_barrier_grids)
 
-
     def _update_screen(self):
         self.screen.fill(self.settings.bg_colour)
-        self.stage.draw_stage()
-        self.barriers.draw_barriers()
-        self.mirrors.draw_mirrors()
-        self._draw_players()
+        if self.stats.active:
+            if self.constructing:
+                if time.time() > self.timer + 1:
+                    self.stage.draw_stage()
+                if time.time() > self.timer + 2:
+                    self.barriers.draw_barriers()
+                if time.time() > self.timer + 3:
+                    self.mirrors.draw_mirrors()
+                if time.time() > self.timer + 4:
+                    self._draw_players()
+                if time.time() > self.timer + 8:
+                    self.constructing = False
+            if not self.constructing:
+                self.stage.draw_stage()
+                self.barriers.draw_barriers()
+                self.mirrors.draw_mirrors()
+                self._draw_players()
+        if not self.stats.active:
+            self.start_button.draw_button()
         pygame.display.flip()
 
 
