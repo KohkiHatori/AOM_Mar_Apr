@@ -1,6 +1,7 @@
 import sys
 import pygame
 import random
+import time
 from settings import Settings
 from stage import Stage
 from barrier import Barriers
@@ -49,16 +50,21 @@ class Main:
         self._create_players()
 
     def _create_players(self):
-        print(len(self.barriers.no_barrier_grids))
+        indices = []
+        for x in range(len(self.barriers.no_barrier_grids)):
+            indices.append(x)
         for i in range(self.settings.num_player):
             new_player = Player(self)
-            new_player.position = random.randint(0, len(self.barriers.no_barrier_grids) - 1)
+            new_player.position = random.choice(indices)
+            new_player.colour = self.settings.player_colours[i]
             self.players.append(new_player)
+            indices.remove(new_player.position)
 
 
     def _draw_players(self):
         for player in self.players:
             player.blitme(player_allowed_grids=self.barriers.no_barrier_grids)
+
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_colour)

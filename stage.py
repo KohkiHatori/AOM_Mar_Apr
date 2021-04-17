@@ -12,6 +12,7 @@ class Stage:
         self.starting_y = 100
         self.starting_x = 100
         self.grids = []
+        self.width = self.settings.grid_line_width
 
     def create_stage(self):
         y = self.starting_y
@@ -26,6 +27,6 @@ class Stage:
 
     def draw_stage(self):
         for grid in self.grids:
-            pygame.draw.rect(self.screen, self.settings.stage_colour, grid, width = 5)
+            pygame.draw.rect(self.screen, self.settings.stage_colour, grid, self.width)
 
 

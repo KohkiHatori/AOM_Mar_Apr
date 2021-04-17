@@ -67,6 +67,8 @@ class Barriers:
 
         self.no_barrier_grids = [item for sublist in self.no_barrier_grids for item in sublist]
         self.no_barrier_grids = [x for x in self.no_barrier_grids if x != 0]
+        for item in self.no_barrier_grids:
+            self.no_barrier_grids[self.no_barrier_grids.index(item)] = item.inflate(15, 15)
 
     def draw_barriers(self):
         for grid in self.barrier_grids:
