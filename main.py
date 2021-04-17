@@ -7,6 +7,7 @@ from stage import Stage
 from barrier import Barriers
 from mirror import Mirrors
 from player import Player
+from text import Text
 
 
 class Main:
@@ -24,6 +25,7 @@ class Main:
         self.barriers = Barriers(self)
         self.mirrors = Mirrors(self)
         self.players = []
+        self.text = Text(self)
 
     def run_game(self):
         self._create_environment()
