@@ -7,11 +7,10 @@ class Stage:
         self.screen = main.screen
         self.settings = main.settings
         self.colour = self.settings.stage_colour
-        self.centre_screen = (self.settings.screen_width / 2, self.settings.screen_height / 2)
         self.grid_width = self.settings.grid_width
         self.grid_height = self.settings.grid_height
-        self.starting_y = self.centre_screen[1] - self.settings.num_row / 2 * self.grid_height
-        self.starting_x = self.centre_screen[0] - self.settings.num_column / 2 * self.grid_width
+        self.starting_y = 100
+        self.starting_x = 100
         self.grids = []
 
     def create_stage(self):

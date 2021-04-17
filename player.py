@@ -10,7 +10,8 @@ class Players(Sprite):
         self.settings = main.settings
         self.stage = main.stage
         self.num = self.settings.num_player
-        self.image = pygame.image.load("images/player.png")
+        self.image = pygame.image.load("images/player.png").convert_alpha()
+        self.image = pygame.transform.smoothscale(self.image, (self.settings.grid_width - 10, self.settings.grid_height - 10))
         self.rect = self.image.get_rect()
 
 

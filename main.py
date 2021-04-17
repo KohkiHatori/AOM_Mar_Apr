@@ -15,6 +15,8 @@ class Main:
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
+        self.settings.grid_width = (self.settings.screen_width - 200) // self.settings.num_column
+        self.settings.grid_height = (self.settings.screen_height - 200) // self.settings.num_row
         pygame.display.set_caption("Kohki Hatori")
         self.stage = Stage(self)
         self.barriers = Barriers(self)

@@ -25,9 +25,7 @@ class Barriers:
         self.barrier_grids = []
         for i in range(self.num):
             is_vertical = bool(random.getrandbits(1))
-            length = random.randint(self.minimum_length,
-                                    self.settings.num_row / 2 - 1 if is_vertical else self.settings.num_column / 2 - 1)
-            print(is_vertical, length)
+            length = random.randint(self.minimum_length, self.settings.barrier_maximum_length)
             if is_vertical:
                 valid = False
                 while not valid:
@@ -37,7 +35,6 @@ class Barriers:
                     for n in range(start_row, start_row + length):
                         list_boolean.append(self.barrier_allowed_grids[n][start_column] != 0)
                         valid = all(list_boolean)
-                print(start_column,start_row)
                 for n in range(start_row, start_row + length):
                     self.barrier_grids.append(self.barrier_allowed_grids[n][start_column])
                 for m in range(-1, 2, 1):
@@ -57,7 +54,6 @@ class Barriers:
                     for n in range(start_column, start_column + length):
                         list_boolean.append(self.barrier_allowed_grids[start_row][n] != 0)
                     valid = all(list_boolean)
-                print(start_column,start_row)
                 for n in range(start_column, start_column + length):
                     self.barrier_grids.append(self.barrier_allowed_grids[start_row][n])
                 for m in range(-1, 2, 1):

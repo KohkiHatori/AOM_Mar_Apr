@@ -6,7 +6,7 @@ class Settings:
 
         self.stage_colour = (0,0,0)
         self.num_row = 6
-        self.num_column = 8
+        self.num_column = 12
 
         self.num_grid = self.num_row * self.num_column
         self.grid_width = 100
@@ -15,6 +15,7 @@ class Settings:
         self.num_barrier = self.num_grid // 10
         self.barrier_colour = (255,255,0)
         self.minimu_barrier_length = 2
+        self.barrier_maximum_length = 3
 
         self.num_mirror = 5
         self.mirror_width = 10
