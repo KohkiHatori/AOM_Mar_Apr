@@ -1,13 +1,15 @@
 import sys
 import pygame
 import random
-import time
+from time import sleep
 from settings import Settings
 from stage import Stage
 from barrier import Barriers
 from mirror import Mirrors
 from player import Player
 from text import Text
+from stats import Stats
+from button import Button
 
 
 class Main:
@@ -26,10 +28,15 @@ class Main:
         self.mirrors = Mirrors(self)
         self.players = []
         self.text = Text(self)
+        self.stats = Stats()
+        self.start_button = Button("START")
 
     def run_game(self):
+
         self._create_environment()
         while True:
+            if self.stats.active:
+                pass
             self._check_events()
             self._update_screen()
 
@@ -47,9 +54,13 @@ class Main:
 
     def _create_environment(self):
         self.stage.create_stage()
+        sleep(2)
         self.barriers.create_barriers()
+        sleep(2)
         self.mirrors.create_mirrors()
+        sleep(2)
         self._create_players()
+        sleep(2)
 
     def _create_players(self):
         indices = []
