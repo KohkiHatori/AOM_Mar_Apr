@@ -47,12 +47,13 @@ class Settings:
         self.mirror_width = 10
         self.mirror_colour = grey
 
-        self.num_player = 6
-        self.player_colours = [green, red, blue, purple, orange, turqoise]
+        self.num_player = 7
+        self.player_colours = [green, red, blue, purple, orange, turqoise, pink]
 
         self.num_shots = 5
         self.bullet_colour = pink
         self.bullet_width = 10
         self.bullet_height = 10
+        self.bullet_speed = 2
 
 

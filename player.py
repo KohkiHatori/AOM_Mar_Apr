@@ -14,6 +14,7 @@ class Player:
         self.position = 0
         self.colour = 0
         self.width = self.settings.grid_line_width
+        self.shot_left = self.settings.num_shots
 
     def blitme(self, player_allowed_grids):
         self.rect.center = player_allowed_grids[self.position].center
