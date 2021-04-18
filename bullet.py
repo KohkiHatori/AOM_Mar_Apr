@@ -1,11 +1,9 @@
 import pygame
-from pygame.sprite import Sprite
 
 
-class Bullet(Sprite):
+class Bullet:
 
     def __init__(self, main):
-        super().__init__()
         self.screen = main.screen
         self.settings = main.settings
         self.colour = self.settings.bullet_colour
@@ -19,9 +17,7 @@ class Bullet(Sprite):
         self.x += self.x_change_rate
         self.y += self.y_change_rate
         self.rect.x = self.x
-        print(self.rect.x)
         self.rect.y = self.y
-        print(self.rect.y)
 
     def draw_bullet(self):
-        pygame.draw.rect(self.screen, self.colour, self.rect)
+        pygame.draw.rect(self.screen, self.colour, self.rect, border_radius=4)
