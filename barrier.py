@@ -2,6 +2,7 @@ import pygame
 import random
 import copy
 
+
 class Barriers:
 
     def __init__(self, main):
@@ -66,9 +67,10 @@ class Barriers:
                             self.barrier_allowed_grids[start_row + m][n] = 0
 
         self.no_barrier_grids = [item for sublist in self.no_barrier_grids for item in sublist]
-        self.no_barrier_grids = [x for x in self.no_barrier_grids if x != 0]
+        self.no_barrier_grids = [item for item in self.no_barrier_grids if item != 0]
         for item in self.no_barrier_grids:
             self.no_barrier_grids[self.no_barrier_grids.index(item)] = item.inflate(15, 15)
+
 
     def draw_barriers(self):
         for grid in self.barrier_grids:

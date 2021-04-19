@@ -19,7 +19,6 @@ def run_once(func):
         if not wrapper.has_run:
             wrapper.has_run = True
             return func(*args, **kwargs)
-
     wrapper.has_run = False
     return wrapper
 
@@ -86,19 +85,31 @@ class Main:
         self._create_players()
 
     def _create_players(self):
-        indices = []
-        for x in range(len(self.barriers.no_barrier_grids)):
-            indices.append(x)
+        no_barrier = self.barriers.no_barrier_grids.copy()
         for i in range(self.settings.num_player):
             new_player = Player(self)
-            new_player.position = random.choice(indices)
             new_player.colour = self.settings.player_colours[i]
+            valid = False
+            while not valid:
+                new_player.rect = random.choice(no_barrier)
+                if no_barrier[no_barrier.index(new_player.rect)] != 0:
+                    x, y = new_player.rect.centerx, new_player.rect.centery
+                    for t in range(-1, 2):
+                        for n in range(-1, 2):
+                            for grid in no_barrier:
+                                try:
+                                    collision = grid.collidepoint(x - self.settings.grid_width * n,
+                                                                  y - self.settings.grid_height * t)
+                                    if collision:
+                                        no_barrier[no_barrier.index(grid)] = 0
+                                except:
+                                    pass
+                    valid = True
             self.players.append(new_player)
-            indices.remove(new_player.position)
 
     def _draw_players(self):
         for player in self.players:
-            player.blitme(player_allowed_grids=self.barriers.no_barrier_grids)
+            player.blitme()
 
     def _observable(self, observer):
         observable_players = []
@@ -155,7 +166,7 @@ class Main:
         new_bullet.x, new_bullet.y = x, y
         if target != 0:
             x_, y_ = target.rect.centerx, target.rect.centery
-            if x_ - x != 0:
+            if x_ != x:
                 change_in_y = y_ - y
                 change_in_x = x_ - x
                 route_length = math.sqrt(change_in_y ** 2 + change_in_x ** 2)
@@ -167,8 +178,7 @@ class Main:
                 new_bullet.x_change_rate = 0
                 new_bullet.y_change_rate = self.settings.bullet_speed if y_ > y else -self.settings.bullet_speed
         else:
-            # angle = random.randint(0, 360)
-            angle = 90
+            angle = random.randint(0, 360)
             if angle == 90 or angle == 270:
                 if angle == 90:
                     y_ = 0
@@ -217,7 +227,6 @@ class Main:
                 num_loop = route_length / self.settings.bullet_speed
                 new_bullet.x_change_rate = change_in_x / num_loop
                 new_bullet.y_change_rate = new_bullet.x_change_rate * gradient
-
 
     def _update_bullet(self):
         for bullet in self.bullets.copy():
