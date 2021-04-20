@@ -50,7 +50,7 @@ class Settings:
         self.num_player = 7
         self.player_colours = [green, red, blue, purple, orange, turqoise, pink]
 
-        self.num_shots = 5
+        self.num_shots = 10
         self.bullet_colour = pink
         self.bullet_width = 10
         self.bullet_height = 10

@@ -45,9 +45,14 @@ class Main:
         self.constructing = True
         self.cheating = False
         self.real_game = False
+        self.end = False
         self.bullets = []
         self.turn_ended = True
+        self.no_bullet = True
+        self.player_moved = False
         self.shooter = 0
+        self.moving_player = 0
+        self.last_bullet = 0
 
     def run_game(self):
         while True:
@@ -233,7 +238,6 @@ class Main:
             if bullet.rect.bottom <= 0 or bullet.rect.right <= 0 or bullet.rect.left >= self.settings.screen_width or \
                     bullet.rect.top >= self.settings.screen_height:
                 self.bullets.remove(bullet)
-                time.sleep(0.5)
                 self._remove_cheater_start_real_game(bullet.shooter)
             bullet.update()
             self._check_bullet_barrier_collisions(bullet)
@@ -259,7 +263,7 @@ class Main:
             collision = pygame.Rect.colliderect(bullet.rect, player.rect)
             if collision:
                 self.bullets.remove(bullet)
-                time.sleep(1)
+                time.sleep(0.5)
                 self.players.remove(player)
                 self._remove_cheater_start_real_game(bullet.shooter)
                 break
@@ -267,27 +271,58 @@ class Main:
     def _check_bullet_mirror_collisions(self, bullet):
         for mirror in self.mirrors.mirror_grids:
             collision = pygame.Rect.colliderect(bullet.rect, mirror)
-            if collision:
+            if collision and time.time() - self.timer > 0.1:
                 if mirror.width > mirror.height:
                     bullet.y_change_rate *= -1
                 else:
                     bullet.x_change_rate *= -1
+                self.timer = time.time()
 
     def _real_game(self):
         if len(self.players) != 1:
             if self.shooter > len(self.players) - 1:
                 self.shooter = 0
+            try:
+                if self.last_bullet.shooter == self.players[0]:
+                    self.moving_player = 0
+            except:
+                pass
             if self.turn_ended and self.players[self.shooter].shot_left != 0:
                 self._shoot(self.players[self.shooter])
-                if self.shooter != len(self.players) - 1:
-                    self.shooter += 1
-                else:
-                    self.shooter = 0
                 self.turn_ended = False
-            if len(self.bullets) == 0:
+                self.no_bullet = False
+            if self.last_bullet not in self.bullets:
+                self.no_bullet = True
+            if self.no_bullet:
+                self.player_moved = False
+                self._move(self.players[self.moving_player])
+            if self.no_bullet and self.player_moved:
                 self.turn_ended = True
         else:
             self.stats.game_active = False
+
+    def _move(self, player):
+        available_grids = []
+        x, y = player.rect.centerx, player.rect.centery
+        for t in range(-1, 2):
+            for n in range(-1, 2):
+                for grid in self.stage.grids:
+                    try:
+                        collision = grid.collidepoint(x - self.settings.grid_width * n,
+                                                      y - self.settings.grid_height * t)
+                        if collision and grid in self.barriers.no_barrier_grids:
+                            available_grids.append(grid)
+                    except:
+                        pass
+        destination = random.choice(available_grids)
+        player.rect.centerx, player.rect.centery = destination.centerx, destination.centery
+        self.player_moved = True
+        self.moving_player += 1
+        if self.shooter != len(self.players) - 1:
+            self.shooter += 1
+        else:
+            self.shooter = 0
+        time.sleep(0.5)
 
     def _shoot(self, player):
         observable_players = self._observable(player)
@@ -330,6 +365,8 @@ class Main:
                 self._update_bullet()
                 for bullet in self.bullets:
                     bullet.draw_bullet()
+            elif self.end:
+                pass
         else:
             self.start_button.draw_button()
         pygame.display.flip()
