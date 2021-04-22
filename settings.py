@@ -54,6 +54,6 @@ class Settings:
         self.bullet_colour = pink
         self.bullet_width = 10
         self.bullet_height = 10
-        self.bullet_speed = 2
+        self.bullet_speed = 1
 
 

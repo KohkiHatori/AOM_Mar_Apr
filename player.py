@@ -14,6 +14,7 @@ class Player:
         self.colour = 0
         self.line_width = self.settings.grid_line_width
         self.shot_left = self.settings.num_shots
+        self.original_index = 0
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)
