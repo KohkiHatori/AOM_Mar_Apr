@@ -1,6 +1,7 @@
 import pygame
 import random
 import copy
+import itertools
 
 
 class Barriers:
@@ -31,12 +32,28 @@ class Barriers:
             if is_vertical:
                 valid = False
                 while not valid:
-                    start_row = random.randint(0, self.settings.num_row - length)
-                    start_column = random.randint(0, self.settings.num_column - 1)
-                    list_boolean = []
-                    for n in range(start_row, start_row + length):
-                        list_boolean.append(self.barrier_allowed_grids[n][start_column] != 0)
-                        valid = all(list_boolean)
+                    start_row_options = [row for row in range(0, self.settings.num_row - length + 1)]
+                    start_column_options = [column for column in range(0, self.settings.num_column)]
+                    random.shuffle(start_row_options)
+                    random.shuffle(start_column_options)
+                    for column, row in itertools.product(start_column_options, start_row_options):
+                        start_column = column
+                        start_row = row
+                        list_boolean = []
+                        for n in range(start_row, start_row + length):
+                            there_is_no_barrier = self.barrier_allowed_grids[n][start_column] != 0
+                            if there_is_no_barrier:
+                                list_boolean.append(there_is_no_barrier)
+                            else:
+                                list_boolean.append(there_is_no_barrier)
+                                break
+                        if all(list_boolean):
+                            valid = True
+                            break
+                    else:
+                        continue
+                    break
+
                 for n in range(start_row, start_row + length):
                     self.barrier_grids.append(self.barrier_allowed_grids[n][start_column])
                     self.no_barrier_grids[n][start_column] = 0
@@ -51,12 +68,28 @@ class Barriers:
             else:
                 valid = False
                 while not valid:
-                    start_column = random.randint(0, self.settings.num_column - length)
-                    start_row = random.randint(0, self.settings.num_row - 1)
-                    list_boolean = []
-                    for n in range(start_column, start_column + length):
-                        list_boolean.append(self.barrier_allowed_grids[start_row][n] != 0)
-                    valid = all(list_boolean)
+                    start_column_options = [column for column in range(0, self.settings.num_column - length + 1)]
+                    start_row_options = [row for row in range(0, self.settings.num_row)]
+                    random.shuffle(start_column_options)
+                    random.shuffle(start_row_options)
+                    for row, column in itertools.product(start_row_options, start_column_options):
+                        start_column = column
+                        start_row = row
+                        list_boolean = []
+                        for n in range(start_column, start_column + length):
+                            there_is_no_barrier = self.barrier_allowed_grids[start_row][n] != 0
+                            if there_is_no_barrier:
+                                list_boolean.append(there_is_no_barrier)
+                            else:
+                                list_boolean.append(there_is_no_barrier)
+                                break
+                        if all(list_boolean):
+                            valid = True
+                            break
+                    else:
+                        continue
+                    break
+
                 for n in range(start_column, start_column + length):
                     self.barrier_grids.append(self.barrier_allowed_grids[start_row][n])
                     self.no_barrier_grids[start_row][n] = 0
@@ -70,7 +103,6 @@ class Barriers:
         self.no_barrier_grids = [item for item in self.no_barrier_grids if item != 0]
         for item in self.no_barrier_grids:
             self.no_barrier_grids[self.no_barrier_grids.index(item)] = item.inflate(15, 15)
-
 
     def draw_barriers(self):
         for grid in self.barrier_grids:

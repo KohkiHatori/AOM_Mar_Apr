@@ -70,7 +70,8 @@ class Main:
                 self._check_start_button(mouse_pos)
                 self._check_end_button(mouse_pos)
 
-    def _check_keydown_events(self, event):
+    @staticmethod
+    def _check_keydown_events(event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
                 sys.exit()
@@ -101,9 +102,15 @@ class Main:
             new_player.colour = self.settings.player_colours[i]
             valid = False
             while not valid:
-                new_player.rect = random.choice(no_barrier)
+                random.shuffle(no_barrier)
+                for item in no_barrier:
+                    if item != 0:
+                        choice = item
+                        break
+                new_player.rect = choice
                 if no_barrier[no_barrier.index(new_player.rect)] != 0:
                     x, y = new_player.rect.centerx, new_player.rect.centery
+
                     for row in range(-1, 2):
                         for column in range(-1, 2):
                             for grid in no_barrier:
@@ -115,12 +122,37 @@ class Main:
                                 except:
                                     pass
                     valid = True
+            for grid in self.stage.grids:
+                collision = choice.collidepoint(grid.centerx, grid.centery)
+                if collision:
+                    index = self.stage.grids.index(grid)
+                    break
+
             self.players.append(new_player)
             new_player.original_index = i
+            new_player.original_grid_y = index // self.settings.num_column + 1
+            new_player.original_grid_x = index - self.settings.num_column * (new_player.original_grid_y - 1) + 1
 
     def _draw_players(self):
         for player in self.players:
             player.blitme()
+
+    def _collision(self, x, x_, y, y_, li):
+        if x != x_:
+            gradient = (y_ - y) / (x_ - x)
+            y_axis_intersect = y - gradient * x
+            for x in range(x, x_, -1 if x_ < x else 1):
+                y = gradient * x + y_axis_intersect
+                for i in li:
+                    if i.collidepoint(x, y):
+                        return True
+            return False
+        else:
+            for y in range(y, y_, -1 if y_ < y else 1):
+                for i in li:
+                    if i.collidepoint(x, y):
+                        return True
+            return False
 
     def _observable(self, observer):
         observable_players = []
@@ -128,28 +160,10 @@ class Main:
         other_players.remove(observer)
         observer_x = observer.rect.centerx
         observer_y = observer.rect.centery
-
-        def _collision(x, x_, y, y_, li):
-            if x != x_:
-                gradient = (y_ - y) / (x_ - x)
-                y_axis_intersect = y - gradient * x
-                for x in range(x, x_, -1 if x_ < x else 1):
-                    y = gradient * x + y_axis_intersect
-                    for i in li:
-                        if i.collidepoint(x, y):
-                            return True
-                return False
-            else:
-                for y in range(y, y_, -1 if y_ < y else 1):
-                    for i in li:
-                        if i.collidepoint(x, y):
-                            return True
-                return False
-
         for player in other_players:
             searching_x = player.rect.centerx
             searching_y = player.rect.centery
-            if not _collision(observer_x, searching_x, observer_y, searching_y, self.barriers.barrier_grids):
+            if not self._collision(observer_x, searching_x, observer_y, searching_y, self.barriers.barrier_grids):
                 observable_players.append(player)
 
         return observable_players
@@ -338,18 +352,41 @@ class Main:
                     if row == 0 and column == 0:
                         pass
                     else:
-                        try:
-                            collision = grid.collidepoint(x - self.settings.grid_width * column,
-                                                          y - self.settings.grid_height * row)
-                            if collision and grid in self.barriers.no_barrier_grids:
-                                for p in self.players:
-                                    collision_2 = p.rect.collidepoint(grid.centerx, grid.centery)
-                                if not collision_2:
-                                    available_grids.append(grid)
-                        except:
-                            pass
-        destination = random.choice(available_grids)
-        player.rect.centerx, player.rect.centery = destination.centerx, destination.centery
+                        collision = grid.collidepoint(x - self.settings.grid_width * column,
+                                                      y - self.settings.grid_height * row)
+                        if collision and grid in self.barriers.no_barrier_grids:
+                            player_player_collision_list = []
+                            for p in self.players:
+                                player_player_collision = p.rect.collidepoint(grid.centerx, grid.centery)
+                                player_player_collision_list.append(player_player_collision)
+                            if any(player_player_collision_list):
+                                pass
+                            else:
+                                available_grids.append(grid)
+
+        other_players = self.players.copy()
+        other_players.remove(player)
+        safe_grids = []
+        for grid in available_grids:
+            x_ = grid.centerx
+            y_ = grid.centery
+            safe_or_not_list = []
+            for p in other_players:
+                x = p.rect.centerx
+                y = p.rect.centery
+                if self._collision(x, x_, y, y_, self.barriers.barrier_grids):
+                    safe_or_not = True
+                    safe_or_not_list.append(safe_or_not)
+            if all(safe_or_not_list):
+                safe_grids.append(grid)
+
+        if len(safe_grids) == 0:
+            destination = random.choice(available_grids)
+            player.rect.centerx, player.rect.centery = destination.centerx, destination.centery
+        else:
+            destination = random.choice(safe_grids)
+            player.rect.centerx, player.rect.centery = destination.centerx, destination.centery
+
         self.player_moved = True
         if self.shooter < len(self.players) - 1:
             self.shooter += 1

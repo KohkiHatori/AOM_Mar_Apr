@@ -42,14 +42,16 @@ class Text:
     def prep_winner(self):
         self.winner_list = []
         for player in self.main.players:
-            self.winner_list.append(player.original_index)
+            self.winner_list.append([player.original_index, player.original_grid_x, player.original_grid_y])
         sub_string = ""
+        sub_string_2 =""
         for i in self.winner_list:
-            sub_string += "Player {}".format(i)
+            sub_string += "Player {} ".format(i[0] + 1)
+            sub_string_2 += " ({},{}) ".format(i[1], i[2])
         if len(self.winner_list) > 1:
-            string = "Winners are {}".format(sub_string)
+            string = "Winners are {} \n Best starting grids are {}".format(sub_string, sub_string_2)
         else:
-            string = "Winner is {}".format(sub_string)
+            string = "Winner is {} \n Best starting grid is {}".format(sub_string, sub_string_2)
         self.winner_image = self.font.render(string, True, self.text_color, self.settings.bg_colour)
         self.winner_rect = self.winner_image.get_rect()
         self.winner_rect.centerx = self.screen.get_width() / 2
