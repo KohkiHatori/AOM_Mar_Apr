@@ -43,15 +43,17 @@ class Text:
         self.winner_list = []
         for player in self.main.players:
             self.winner_list.append(player.original_index)
-        string = "Winners are {}"
         sub_string = ""
         for i in self.winner_list:
             sub_string += "Player {}".format(i)
-        string.format(sub_string)
+        if len(self.winner_list) > 1:
+            string = "Winners are {}".format(sub_string)
+        else:
+            string = "Winner is {}".format(sub_string)
         self.winner_image = self.font.render(string, True, self.text_color, self.settings.bg_colour)
-        self.winner_rect = image.get_rect()
-        rect.centerx = self.screen.get_width() / 2
-        rect.top = 50
+        self.winner_rect = self.winner_image.get_rect()
+        self.winner_rect.centerx = self.screen.get_width() / 2
+        self.winner_rect.top = 250
 
     def show_cheater(self):
         self.screen.blit(self.cheat_image, self.cheat_rect)
